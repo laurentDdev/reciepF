@@ -1,11 +1,46 @@
 import {View, Text, TextInput, Pressable, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Input from '../../components/input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// @ts-ignore
+import {API_URL} from "@env"
+import axios from 'axios';
+import AuthContext from '../../context/auth.context';
+
+const apiUrl = API_URL
+
+
 const LoginScreen = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const auth = useContext(AuthContext)
+
+  const handleLogin = () => {
+    if (email.length < 3 || password.length < 3) return
+    axios.post(`${apiUrl}/auth/login`, {
+        email: email,
+        password: password
+    }).then( async res => {
+        console.log(res);
+        const token = res.headers.authorization
+        auth.setIsLogin(true)
+        console.log(token);
+        try {
+            await AsyncStorage.setItem("@token", token)
+        }catch(e) {
+            console.log(e);
+            
+        }
+        
+    }).catch(err => {
+        console.log(err.response);
+        
+    })
+  }
+
+
   return (
     <View
       style={{
@@ -26,6 +61,7 @@ const LoginScreen = ({navigation}: any) => {
           iconColor="black"
           placeHolder="Entrez votre email"
           onTextChange={setEmail}
+          textValue={email}
         />
         <Input
           label="Mot de passe"
@@ -36,6 +72,7 @@ const LoginScreen = ({navigation}: any) => {
           onTextChange={setPassword}
           secure={!showPassword}
           iconAction={() => setShowPassword(prev => !prev)}
+          textValue={password}
         />
         <Pressable onPress={() => {}}>
           <Text style={{color: '#e67e22'}}>Mot de passe oublié ?</Text>
@@ -43,6 +80,7 @@ const LoginScreen = ({navigation}: any) => {
       </View>
       <View style={{width: '70%', alignSelf: 'center'}}>
         <TouchableOpacity
+        onPress={handleLogin}
           style={{
             backgroundColor: '#e74c3c',
             padding: 10,

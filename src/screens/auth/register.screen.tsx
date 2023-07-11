@@ -31,6 +31,10 @@ const RegisterScreen = ({navigation}: any) => {
     }).then(res => {
     
         if (res.status == 200) {
+            setEmail("")
+            setPassword("")
+            setConfirmPassword("")
+            setPseudo("")
             navigation.navigate("login")
         }
         
@@ -63,6 +67,7 @@ const RegisterScreen = ({navigation}: any) => {
           iconColor="black"
           placeHolder="Entrez votre pseudo"
           onTextChange={setPseudo}
+          textValue={pseudo}
         />
         <Input
           label="Email"
@@ -71,6 +76,7 @@ const RegisterScreen = ({navigation}: any) => {
           iconColor="black"
           placeHolder="Entrez votre email"
           onTextChange={setEmail}
+          textValue={email}
         />
         <Input
           label="Mot de passe"
@@ -81,6 +87,7 @@ const RegisterScreen = ({navigation}: any) => {
           onTextChange={setPassword}
           secure={!showPassword}
           iconAction={() => setShowPassword(prev => !prev)}
+          textValue={password}
         />
         <Input
           label="Confirmez votre mot de passe"
@@ -91,6 +98,7 @@ const RegisterScreen = ({navigation}: any) => {
           onTextChange={setConfirmPassword}
           secure={!showConfirmPassword}
           iconAction={() => setShowConfirmPassword(prev => !prev)}
+          textValue={confirmPassword}
         />
         {messageError.length > 0 && <Text style={{color: 'red'}}>{messageError}</Text>}
 

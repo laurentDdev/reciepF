@@ -5,16 +5,17 @@ import Icon from "react-native-vector-icons/MaterialIcons"
 type props = {
     label: string
     textColor: string
+    textValue: string
     placeHolder?: string
     icon?: string
     iconColor?: string
     onTextChange: any
-    secure: boolean
+    secure?: boolean
     iconAction?: any
 }
 
 
-export default function Input({label, textColor, placeHolder, icon, iconColor, onTextChange, secure, iconAction}: props) {
+export default function Input({label,textValue, textColor, placeHolder, icon, iconColor, onTextChange, secure = false, iconAction}: props) {
   return (
     <View>
     <Text style={{color: textColor, fontWeight: 'bold'}}>{label}</Text>
@@ -26,7 +27,7 @@ export default function Input({label, textColor, placeHolder, icon, iconColor, o
         alignItems: 'center',
         paddingHorizontal: 15,
       }}>
-      <TextInput style={{flex: 1}} placeholder={placeHolder} onChangeText={onTextChange} secureTextEntry={secure} />
+      <TextInput value={textValue} style={{flex: 1}} placeholder={placeHolder} onChangeText={onTextChange} secureTextEntry={secure} />
       {icon && <Icon name={icon} color={iconColor} onPress={iconAction} />}
     </View>
   </View>
